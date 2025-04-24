@@ -52,3 +52,41 @@ db.car.findAndModify({
 //rollback    sort: { cno: 1 },
 //rollback    update: { $inc: { speed: -100 } },
 //rollback });
+
+
+// changeset amalik:sample_mflix_createSearchIndex runWith:mongosh
+use sample_mflix
+db.movies.createSearchIndex(
+    "default",
+    { mappings: { dynamic: true } }
+ )
+//rollback db.runCommand(
+//rollback     {
+//rollback        dropSearchIndex: "movies",
+//rollback        name: "default"
+//rollback     }
+//rollback  )
+
+// changeset amalik:sample_mflix_ runWith:mongosh
+use sample_mflix
+db.movies.aggregate([
+    {
+      $search:
+      {
+        "text": {
+          "query": "baseball",
+          "path": "plot"
+        }
+      }
+    },
+    {
+      $limit: 3
+    },
+    {
+      $project: {
+        "_id": 0,
+        "title": 1,
+        "plot": 1
+      }
+    }
+  ])

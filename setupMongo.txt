@@ -1,0 +1,32 @@
+# Docker
+docker run --name mongodb -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password mongodb/mongodb-community-server:6.0-ubi8
+docker stop mongodb && docker rm mongodb
+
+
+# Mac
+brew services start mongodb/brew/mongodb-community@7.0
+brew services stop mongodb-community@7.0
+
+
+db.createUser(
+   {
+     user: "amalik",
+     pwd: "password",
+     roles: [ "dbOwner" ]
+   }
+)
+
+
+liquibase --log-level=DEBUG \
+    --classpath="/Users/adeelmalik/Desktop/LiquibaseHub/liquibase-4.30.0-MONGODB/lib/liquibase-commercial-mongodb-1.5.0.jar" \
+    --url="mongodb://localhost:27017/admin" \
+    --username="admin" \
+    --password="password" \
+    connect
+
+liquibase --log-level=DEBUG \
+    --classpath="/Users/adeelmalik/Desktop/LiquibaseHub/liquibase-4.30.0-MONGODB/lib/liquibase-commercial-mongodb-1.4.1.jar" \
+    --url="mongodb://localhost:27017/admin" \
+    --username="admin" \
+    --password="password" \
+    connect
